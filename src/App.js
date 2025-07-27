@@ -1,24 +1,89 @@
-function App() {
-  return (
-    <main>
-      <h1>Hi, I'm (your name)</h1>
-      <img alt="My profile pic" src="https://via.placeholder.com/350" />
-      <h2>About Me</h2>
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-        commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-        velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
-        occaecat cupidatat non proident, sunt in culpa qui officia deserunt
-        mollit anim id est laborum.
-      </p>
+import { useState } from "react";
 
-      <div>
-        <a href="https://github.com">GitHub</a>
-        <a href="https://linkedin.com">LinkedIn</a>
-      </div>
-    </main>
+function App() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [interests, setInterests] = useState([]);
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleCheckbox = (e) => {
+    const { value, checked } = e.target;
+    setInterests((prev) =>
+      checked ? [...prev, value] : prev.filter((i) => i !== value)
+    );
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setSubmitted(true);
+  };
+
+  return (
+    <div>
+      <h1>Newsletter Signup</h1>
+
+      <form onSubmit={handleSubmit}>
+        <label>
+          Name:
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+        </label>
+
+        <label>
+          Email:
+          <input
+            type="text"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </label>
+
+        <fieldset>
+          <legend>Select your interests</legend>
+          <label>
+            <input
+              type="checkbox"
+              value="React"
+              onChange={handleCheckbox}
+              checked={interests.includes("React")}
+            />
+            React
+          </label>
+          <label>
+            <input
+              type="checkbox"
+              value="JavaScript"
+              onChange={handleCheckbox}
+              checked={interests.includes("JavaScript")}
+            />
+            JavaScript
+          </label>
+          <label>
+            <input
+              type="checkbox"
+              value="CSS"
+              onChange={handleCheckbox}
+              checked={interests.includes("CSS")}
+            />
+            CSS
+          </label>
+        </fieldset>
+
+        <button type="submit">Sign Up</button>
+      </form>
+
+      {submitted && (
+        <div>
+          <h2>
+            Thank you {name}! You signed up with {email}.
+          </h2>
+          <p>Your interests: {interests.join(", ")}</p>
+        </div>
+      )}
+    </div>
   );
 }
 
